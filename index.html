@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krypto Wechselkursrechner & Chart Analyse</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Navigation / Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <span class="logo-icon">⚡</span>
+                <div class="logo-text">
+                    <h1>CryptoRate<span class="highlight">Dark</span></h1>
+                    <p class="subtitle">Bitvavo & Binance Live Kursrechner</p>
+                </div>
+            </div>
+
+            <nav class="nav-tabs">
+                <button class="nav-btn active" data-target="page-calculator">
+                    <span class="nav-icon">💱</span>
+                    <span>Wechselkursrechner</span>
+                </button>
+                <button class="nav-btn" data-target="page-chart">
+                    <span class="nav-icon">📈</span>
+                    <span>12-Monate Chart (10D SMA)</span>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- PAGE 1: WECHSELKURSRECHNER & KURSÜBERSICHT -->
+            <section id="page-calculator" class="page-section active">
+                <div class="card-grid">
+                    <!-- Calculator Card -->
+                    <div class="card calc-card">
+                        <div class="card-header">
+                            <h2>Währungsrechner</h2>
+                            <span class="badge live-badge"><span class="pulse-dot"></span> Live</span>
+                        </div>
+                        <div class="card-body">
+                            <form id="calc-form" onsubmit="return false;">
+                                <div class="input-group">
+                                    <label for="amount-input">Betrag</label>
+                                    <input type="number" id="amount-input" value="1" min="0" step="any" placeholder="Betrag eingeben">
+                                </div>
+
+                                <div class="pair-selection-grid">
+                                    <div class="input-group">
+                                        <label for="from-symbol">Von (Kryptowährung)</label>
+                                        <select id="from-symbol">
+                                            <option value="BTC" selected>Bitcoin (BTC)</option>
+                                            <option value="ETH">Ethereum (ETH)</option>
+                                            <option value="SOL">Solana (SOL)</option>
+                                            <option value="BONK">Bonk (BONK)</option>
+                                            <option value="XRP">Ripple (XRP)</option>
+                                            <option value="ADA">Cardano (ADA)</option>
+                                            <option value="LTC">Litecoin (LTC)</option>
+                                            <option value="DOT">Polkadot (DOT)</option>
+                                            <option value="AVAX">Avalanche (AVAX)</option>
+                                            <option value="LINK">Chainlink (LINK)</option>
+                                        </select>
+                                    </div>
+
+                                    <button id="swap-btn" type="button" title="Richtung wechseln" class="swap-button">
+                                        ⇄
+                                    </button>
+
+                                    <div class="input-group">
+                                        <label for="target-fiat">Zielwährung / Referenz</label>
+                                        <select id="target-fiat">
+                                            <option value="EUR" selected>Euro (EUR) - Bitvavo</option>
+                                            <option value="USDT">Tether (USDT) - Binance</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="quick-amounts">
+                                    <button type="button" class="quick-btn" data-val="0.1">0.1</button>
+                                    <button type="button" class="quick-btn" data-val="0.5">0.5</button>
+                                    <button type="button" class="quick-btn" data-val="1">1</button>
+                                    <button type="button" class="quick-btn" data-val="5">5</button>
+                                    <button type="button" class="quick-btn" data-val="10">10</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Prices Card -->
+                    <div class="card prices-card">
+                        <div class="card-header">
+                            <h2>Börsenvergleich & Live-Preise</h2>
+                            <button id="refresh-prices-btn" class="icon-btn" title="Aktualisieren">🔄</button>
+                        </div>
+                        <div class="card-body">
+                            <div id="loading-indicator" class="loading-spinner-container hidden">
+                                <div class="spinner"></div>
+                                <span>Kurse werden geladen...</span>
+                            </div>
+
+                            <div class="exchange-prices-list">
+                                <!-- Bitvavo Box -->
+                                <div class="exchange-box bitvavo-box">
+                                    <div class="exchange-title">
+                                        <span class="exchange-badge bitvavo">Bitvavo</span>
+                                        <span class="currency-tag">EUR (€)</span>
+                                    </div>
+                                    <div class="price-display">
+                                        <span class="unit-price-label">1 <span class="selected-crypto-code">BTC</span> =</span>
+                                        <span class="price-value" id="bitvavo-unit-price">--</span>
+                                    </div>
+                                    <div class="calculated-result">
+                                        <span class="calc-label">Berechneter Gegenwert:</span>
+                                        <span class="calc-value" id="bitvavo-converted-result">--</span>
+                                    </div>
+                                </div>
+
+                                <!-- Binance Box -->
+                                <div class="exchange-box binance-box">
+                                    <div class="exchange-title">
+                                        <span class="exchange-badge binance">Binance</span>
+                                        <span class="currency-tag">USDT ($)</span>
+                                    </div>
+                                    <div class="price-display">
+                                        <span class="unit-price-label">1 <span class="selected-crypto-code">BTC</span> =</span>
+                                        <span class="price-value" id="binance-unit-price">--</span>
+                                    </div>
+                                    <div class="calculated-result">
+                                        <span class="calc-label">Berechneter Gegenwert:</span>
+                                        <span class="calc-value" id="binance-converted-result">--</span>
+                                    </div>
+                                </div>
+
+                                <!-- Implied EUR/USDT ratio -->
+                                <div class="ratio-box">
+                                    <span class="ratio-label">Implizites Verhältniss (Binance USDT / Bitvavo EUR):</span>
+                                    <span class="ratio-value" id="implied-ratio">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solflare Wallet Card Section -->
+                <div class="card wallet-card">
+                    <div class="card-header">
+                        <div class="wallet-header-title">
+                            <h2>🔥 Solflare Wallet Bestände</h2>
+                            <span class="badge wallet-badge">Solana Mainnet</span>
+                        </div>
+                        <button id="fetch-wallet-btn" class="primary-btn">Bestände abrufen</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-address-group">
+                            <label for="wallet-address-input">Solana Wallet Adresse</label>
+                            <div class="wallet-input-row">
+                                <input type="text" id="wallet-address-input" value="2LyT28MSjRpnek9hNNtqV2QxXVPyJuA4acckTKFcJoPF" placeholder="Solana Wallet Adresse eingeben">
+                            </div>
+                        </div>
+
+                        <div id="wallet-loading" class="loading-spinner-container hidden">
+                            <div class="spinner"></div>
+                            <span>Wallet Bestände werden geladen...</span>
+                        </div>
+
+                        <div id="wallet-results-container" class="wallet-results">
+                            <div class="empty-wallet-msg">Klicken Sie auf "Bestände abrufen", um die aktuellen Coins & Tokens der Wallet zu laden und umzurechnen.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: HISTORICAL 12-MONTH CHART (10D MOVING AVERAGE) -->
+            <section id="page-chart" class="page-section">
+                <div class="card chart-card">
+                    <div class="card-header chart-header-grid">
+                        <div>
+                            <h2>Wechselkursentwicklung & Gleitender Mittelwert</h2>
+                            <p class="section-desc">12-Monate Kurshistorie mit 10-Tage Simple Moving Average (SMA)</p>
+                        </div>
+
+                        <div class="chart-controls">
+                            <div class="input-group inline">
+                                <label for="chart-crypto-select">Kryptowährung:</label>
+                                <select id="chart-crypto-select">
+                                    <option value="BTC" selected>Bitcoin (BTC/EUR)</option>
+                                    <option value="ETH">Ethereum (ETH/EUR)</option>
+                                    <option value="SOL">Solana (SOL/EUR)</option>
+                                    <option value="BONK">Bonk (BONK/EUR)</option>
+                                    <option value="XRP">Ripple (XRP/EUR)</option>
+                                    <option value="ADA">Cardano (ADA/EUR)</option>
+                                    <option value="LTC">Litecoin (LTC/EUR)</option>
+                                    <option value="DOT">Polkadot (DOT/EUR)</option>
+                                    <option value="AVAX">Avalanche (AVAX/EUR)</option>
+                                    <option value="LINK">Chainlink (LINK/EUR)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="chart-stats-summary">
+                            <div class="stat-item">
+                                <span class="stat-label">Aktueller Kurs (EUR)</span>
+                                <span class="stat-value" id="chart-stat-current">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">10-Tage SMA</span>
+                                <span class="stat-value" id="chart-stat-sma">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">12-Monate Hoch</span>
+                                <span class="stat-value text-success" id="chart-stat-high">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">12-Monate Tief</span>
+                                <span class="stat-value text-danger" id="chart-stat-low">--</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <div id="chart-loading" class="chart-loading-overlay hidden">
+                                <div class="spinner"></div>
+                                <span>Lade historische Daten für 12 Monate...</span>
+                            </div>
+                            <canvas id="cryptoHistoryChart"></canvas>
+                        </div>
+
+                        <div class="chart-legend-info">
+                            <div class="legend-badge legend-price">
+                                <span class="color-dot dot-price"></span> Tages-Schlusskurs (Bitvavo)
+                            </div>
+                            <div class="legend-badge legend-sma">
+                                <span class="color-dot dot-sma"></span> 10-Tage Gleitender Mittelwert (SMA-10)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Asynchroner Krypto-Wechselkursrechner & Analysis App &bull; Daten von Bitvavo & Binance APIs</p>
+        </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
