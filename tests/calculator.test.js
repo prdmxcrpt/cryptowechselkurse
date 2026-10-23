@@ -1,6 +1,16 @@
 const assert = require('assert');
 const test = require('node:test');
-const { calculateSMA, calculateConvertedAmount, KNOWN_SPL_MINTS, fetchSolanaWalletBalances } = require('../js/api.js');
+const {
+    calculateSMA,
+    calculateConvertedAmount,
+    KNOWN_SPL_MINTS,
+    fetchSolanaWalletBalances,
+    LAYER1_CHAINS,
+    COIN_DATABASE,
+    getCoinsForChain,
+    verifyCoinAddress,
+    fetchBitqueryAndBlockVisionOverview
+} = require('../js/api.js');
 
 test('calculateSMA - empty or invalid inputs', () => {
     assert.deepStrictEqual(calculateSMA([]), []);
@@ -73,4 +83,38 @@ test('fetchSolanaWalletBalances calculates token conversions correctly', () => {
 
     assert.ok(totalEur > 269 && totalEur < 270);
     assert.ok(totalUsdt > 291 && totalUsdt < 292);
+});
+
+test('LAYER1_CHAINS contains expected 5 chains', () => {
+    assert.ok(LAYER1_CHAINS.BITCOIN);
+    assert.ok(LAYER1_CHAINS.ETHEREUM);
+    assert.ok(LAYER1_CHAINS.SOLANA);
+    assert.ok(LAYER1_CHAINS.SUI);
+    assert.ok(LAYER1_CHAINS.BNB);
+});
+
+test('getCoinsForChain filters coins by chain and search query', () => {
+    const solCoins = getCoinsForChain('solana');
+    assert.ok(solCoins.length >= 3);
+    assert.strictEqual(solCoins[0].address, 'Nativ');
+
+    const bonkCoins = getCoinsForChain('solana', 'bonk');
+    assert.strictEqual(bonkCoins.length, 1);
+    assert.strictEqual(bonkCoins[0].symbol, 'BONK');
+});
+
+test('verifyCoinAddress verifies native coins as verified', async () => {
+    const res = await verifyCoinAddress('solana', 'Nativ', true);
+    assert.strictEqual(res.verified, true);
+    assert.strictEqual(res.message, 'Native Chain Coin');
+});
+
+test('fetchBitqueryAndBlockVisionOverview returns formatted token list', async () => {
+    const overview = await fetchBitqueryAndBlockVisionOverview();
+    assert.ok(Array.isArray(overview));
+    assert.ok(overview.length > 0);
+    assert.ok('verified' in overview[0]);
+    assert.ok('priceEur' in overview[0]);
+    assert.ok('marketCap' in overview[0]);
+    assert.ok('volumeBitvavo' in overview[0]);
 });

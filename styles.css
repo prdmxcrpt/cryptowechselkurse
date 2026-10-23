@@ -264,9 +264,319 @@ input[type="number"]:focus, select:focus {
 
 .pair-selection-grid {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1.2fr auto 1fr;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.left-side-fields, .right-side-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Custom Search & Suggestion Dropdown (Feld 2) */
+.search-coin-group {
+    position: relative;
+}
+
+.custom-search-container {
+    position: relative;
+}
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    z-index: 100;
+    max-height: 240px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+
+.suggestion-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.suggestion-line1 {
+    display: flex;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.suggest-symbol {
+    color: var(--accent-blue);
+}
+
+.suggestion-line2 {
+    display: flex;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: monospace;
+    margin-top: 2px;
+}
+
+.no-coins-msg {
+    padding: 12px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-align: center;
+}
+
+/* Selected Coin verification badge & info */
+.selected-coin-info {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.selected-coin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.coin-name-tag {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.badge-verification {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.badge-verification.verified {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    border: 1px solid var(--accent-green);
+}
+
+.badge-verification.unverified {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--accent-red);
+    border: 1px solid var(--accent-red);
+}
+
+.badge-verification.pending {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-amber);
+    border: 1px solid var(--accent-amber);
+}
+
+.selected-coin-address-row {
+    display: flex;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: var(--text-muted);
+}
+
+.coin-address-val {
+    color: var(--accent-blue);
+    word-break: break-all;
+}
+
+/* Admin Dashboard Styles */
+.admin-card {
+    grid-column: 1 / -1;
+}
+
+.admin-section {
+    margin-bottom: 24px;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 24px 0;
+}
+
+.api-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.category-card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.category-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--accent-blue);
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.secondary-btn {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.secondary-btn:hover {
+    background: var(--bg-card-hover);
+}
+
+.save-status-msg {
+    color: var(--accent-green);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.admin-overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+}
+
+.admin-overview-table th, .admin-overview-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-overview-table th {
+    background: var(--bg-dark);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.font-mono {
+    font-family: monospace;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Staking Wallet Management Styles */
+.add-staking-wallet-form {
+    display: flex;
+    gap: 12px;
     align-items: flex-end;
-    gap: 10px;
+    background: var(--bg-dark);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.flex-2 {
+    flex: 2;
+    min-width: 240px;
+}
+
+.staking-wallets-list-container {
+    margin-top: 20px;
+}
+
+.staking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.staking-item-card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.staking-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-staking-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.delete-staking-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.staking-item-addr {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    word-break: break-all;
+}
+
+.staking-item-balance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    margin-top: 4px;
 }
 
 .swap-button {
