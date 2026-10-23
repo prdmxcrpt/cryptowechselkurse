@@ -33,6 +33,10 @@
                     <span class="nav-icon">📈</span>
                     <span>12-Monate Chart (10D SMA)</span>
                 </button>
+                <button class="nav-btn" data-target="page-admin">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Zentrale Verwaltung</span>
+                </button>
             </nav>
         </header>
 
@@ -55,32 +59,51 @@
                                 </div>
 
                                 <div class="pair-selection-grid">
-                                    <div class="input-group">
-                                        <label for="from-symbol">Von (Kryptowährung)</label>
-                                        <select id="from-symbol">
-                                            <option value="BTC" selected>Bitcoin (BTC)</option>
-                                            <option value="ETH">Ethereum (ETH)</option>
-                                            <option value="SOL">Solana (SOL)</option>
-                                            <option value="BONK">Bonk (BONK)</option>
-                                            <option value="XRP">Ripple (XRP)</option>
-                                            <option value="ADA">Cardano (ADA)</option>
-                                            <option value="LTC">Litecoin (LTC)</option>
-                                            <option value="DOT">Polkadot (DOT)</option>
-                                            <option value="AVAX">Avalanche (AVAX)</option>
-                                            <option value="LINK">Chainlink (LINK)</option>
-                                        </select>
+                                    <!-- Left Side: Feld 1 & Feld 2 -->
+                                    <div class="left-side-fields">
+                                        <div class="input-group">
+                                            <label for="layer1-chain-select">Feld 1: Layer-1-Chain</label>
+                                            <select id="layer1-chain-select">
+                                                <option value="bitcoin" selected>Bitcoin (BTC)</option>
+                                                <option value="ethereum">Ethereum (ETH)</option>
+                                                <option value="solana">Solana (SOL)</option>
+                                                <option value="sui">SUI (SUI)</option>
+                                                <option value="bnb">BNB Chain (BNB)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-group search-coin-group">
+                                            <label for="coin-search-input">Feld 2: Coin / Token Suche</label>
+                                            <div class="custom-search-container">
+                                                <input type="text" id="coin-search-input" autocomplete="off" placeholder="Suchen (Name, Symbol, Adresse)...">
+                                                <div id="coin-suggestions-dropdown" class="suggestions-dropdown hidden"></div>
+                                            </div>
+                                            <div id="selected-coin-verification-info" class="selected-coin-info">
+                                                <div class="selected-coin-header">
+                                                    <span id="selected-coin-name-display" class="coin-name-tag">Bitcoin (BTC)</span>
+                                                    <span id="verification-status-badge" class="badge-verification verified">verified</span>
+                                                </div>
+                                                <div class="selected-coin-address-row">
+                                                    <span class="addr-label">Adresse:</span>
+                                                    <span id="selected-coin-address-display" class="coin-address-val">Nativ</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <button id="swap-btn" type="button" title="Richtung wechseln" class="swap-button">
                                         ⇄
                                     </button>
 
-                                    <div class="input-group">
-                                        <label for="target-fiat">Zielwährung / Referenz</label>
-                                        <select id="target-fiat">
-                                            <option value="EUR" selected>Euro (EUR) - Bitvavo</option>
-                                            <option value="USDT">Tether (USDT) - Binance</option>
-                                        </select>
+                                    <!-- Right Side: Target Fiat (EUR / USDT) -->
+                                    <div class="right-side-fields">
+                                        <div class="input-group">
+                                            <label for="target-fiat">Rechte Seite: Zielwährung / Referenz</label>
+                                            <select id="target-fiat">
+                                                <option value="EUR" selected>Euro (EUR) - Bitvavo</option>
+                                                <option value="USDT">Tether (USDT) - Binance</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -174,6 +197,151 @@
 
                         <div id="wallet-results-container" class="wallet-results">
                             <div class="empty-wallet-msg">Klicken Sie auf "Bestände abrufen", um die aktuellen Coins & Tokens der Wallet zu laden und umzurechnen.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: ZENTRALE VERWALTUNGSOBERFLÄCHE -->
+            <section id="page-admin" class="page-section">
+                <div class="card admin-card">
+                    <div class="card-header">
+                        <h2>⚙️ Zentrale Verwaltungsoberfläche</h2>
+                        <span class="badge live-badge">API Keys & Staking Management</span>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Categorized API Key Management -->
+                        <div class="admin-section">
+                            <h3>1. API-Schlüssel & Schnittstellen-Verwaltung</h3>
+                            <p class="section-desc">Verwalten Sie Ihre Zugriffsschlüssel für Onchain-Datenquellen, Börsen, DEXes und Block-Explorere.</p>
+
+                            <div class="api-category-grid">
+                                <!-- Category 1: Onchain-Datenquellen -->
+                                <div class="category-card">
+                                    <h4 class="category-title">🌐 Onchain-Datenquellen</h4>
+                                    <div class="input-group">
+                                        <label for="key-bitquery">Bitquery API Key (Ethereum, Solana, BNB)</label>
+                                        <input type="password" id="key-bitquery" placeholder="Bitquery API-Key eingeben">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="key-blockvision">BlockVision API Key (SUI)</label>
+                                        <input type="password" id="key-blockvision" placeholder="BlockVision API-Key eingeben">
+                                    </div>
+                                </div>
+
+                                <!-- Category 2: Börsen (Exchanges) -->
+                                <div class="category-card">
+                                    <h4 class="category-title">🏦 Börsen (Exchanges)</h4>
+                                    <div class="input-group">
+                                        <label for="key-bitvavo">Bitvavo API Key / Endpunkt</label>
+                                        <input type="password" id="key-bitvavo" placeholder="Bitvavo API-Key eingeben">
+                                    </div>
+                                </div>
+
+                                <!-- Category 3: DEX (Decentralized Exchanges) -->
+                                <div class="category-card">
+                                    <h4 class="category-title">⚡ DEX (Dezentrale Börsen)</h4>
+                                    <div class="input-group">
+                                        <label for="key-cetus">Cetus API Key (SUI DEX)</label>
+                                        <input type="password" id="key-cetus" placeholder="Cetus API-Key / API-URL">
+                                    </div>
+                                </div>
+
+                                <!-- Category 4: Explorere & Übersichten -->
+                                <div class="category-card">
+                                    <h4 class="category-title">🔍 Explorere & Übersichten</h4>
+                                    <div class="input-group">
+                                        <label for="key-suiscan">Suiscan API Key</label>
+                                        <input type="password" id="key-suiscan" placeholder="Suiscan Key">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="key-solscan">Solscan API Key</label>
+                                        <input type="password" id="key-solscan" placeholder="Solscan Key">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="key-stakewiz">Stakewiz API Key</label>
+                                        <input type="password" id="key-stakewiz" placeholder="Stakewiz Key">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="admin-actions">
+                                <button id="save-api-keys-btn" class="primary-btn">💾 API-Schlüssel Speichern</button>
+                                <button id="clear-api-keys-btn" class="secondary-btn">🗑️ Keys Löschen</button>
+                                <span id="api-key-save-status" class="save-status-msg hidden">Gespeichert!</span>
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <!-- Bitquery & BlockVision Live Overview Table -->
+                        <div class="admin-section">
+                            <div class="section-header-flex">
+                                <div>
+                                    <h3>2. Bitquery & BlockVision Token & Marktdaten-Übersicht</h3>
+                                    <p class="section-desc">Gelistete Token, aktuelle Preise, Marktkapitalisierung & Bitvavo Handelsvolumen.</p>
+                                </div>
+                                <button id="refresh-overview-btn" class="secondary-btn">🔄 Daten Aktualisieren</button>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="admin-overview-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Token / Coin</th>
+                                            <th>Chain</th>
+                                            <th>Contract / Address</th>
+                                            <th>Verifizierung</th>
+                                            <th>Preis (EUR)</th>
+                                            <th>Marktkapitalisierung</th>
+                                            <th>Bitvavo Volumen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overview-table-body">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Daten werden geladen...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <!-- Staking-Wallet Address Management -->
+                        <div class="admin-section">
+                            <h3>3. Staking-Wallet-Adressen Verwaltung</h3>
+                            <p class="section-desc">Fügen Sie eigene Staking-Wallet Adressen mit Chain-Zuordnung hinzu und verfolgen Sie Guthaben basierend auf Bitvavo-Marktdaten.</p>
+
+                            <div class="add-staking-wallet-form">
+                                <div class="input-group">
+                                    <label for="staking-chain-select">Chain</label>
+                                    <select id="staking-chain-select">
+                                        <option value="solana">Solana (SOL)</option>
+                                        <option value="ethereum">Ethereum (ETH)</option>
+                                        <option value="sui">SUI (SUI)</option>
+                                        <option value="bnb">BNB Chain (BNB)</option>
+                                        <option value="bitcoin">Bitcoin (BTC)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group flex-2">
+                                    <label for="staking-address-input">Staking-Wallet Adresse</label>
+                                    <input type="text" id="staking-address-input" placeholder="Wallet-Adresse eingeben (z.B. 2LyT28M...)">
+                                </div>
+                                <div class="input-group">
+                                    <label for="staking-amount-input">Staking Bestand (Guthaben)</label>
+                                    <input type="number" id="staking-amount-input" value="10" step="any" placeholder="Anzahl Coins">
+                                </div>
+                                <button id="add-staking-wallet-btn" class="primary-btn">➕ Wallet Hinzufügen</button>
+                            </div>
+
+                            <div class="staking-wallets-list-container">
+                                <h4>Gespeicherte Staking-Wallets:</h4>
+                                <div id="staking-wallets-list" class="staking-list">
+                                    <div class="empty-staking-msg">Keine Staking-Wallets gespeichert.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
